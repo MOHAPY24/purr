@@ -1,9 +1,9 @@
 #!/bin/sh
 
 echo "info: Rebuilding package repositories..."
-cd purr.d || exit 1
+cd /etc/purr/purr.d || exit 1
 
-cat > repositories.json << 'EOL'
+cat > /etc/purr/purr.d/repositories.json << 'EOL'
 {
     "$schema": "https://menory.site/pkgschema.json",
     "main_stable": {

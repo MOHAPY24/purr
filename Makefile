@@ -2,14 +2,17 @@ prog = purr
 cc = gcc
 msg = "Auto commit from Makefile script: timestamp $(shell date +"%Y-%m-%d %T")"
 
-$(prog): src/main.c
-	$(cc) src/checks.c src/main.c -o $(prog)
+
 clean:
 	rm -f /usr/bin/$(prog)
 	rm -rf builds/*
-install: # needs normal make used and sudo
+install:
+	$(cc) src/checks.c src/main.c -o $(prog)
 	cp $(prog) /usr/local/bin/$(prog)
 	chmod +x /usr/local/bin/$(prog)
+	mkdir -p /etc/purr
+	cp -r * /etc/purr
+	chmod -R a+rw /etc/purr
 gitcommit: # remove if not contributing
 	rm -rf builds/*
 	echo "" >> world.json

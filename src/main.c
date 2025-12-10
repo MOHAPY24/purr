@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
     if (argv[1] != NULL && strcmp(argv[1], "install") == 0){
         printf("Installing package: %s\n", argv[2]);
         char command[256];
-        snprintf(command, sizeof(command), "python3 src/get.py %s", argv[2]);
+        snprintf(command, sizeof(command), "python3 /etc/purr/src/get.py %s", argv[2]);
         int result = system(command);
         if (result != 0){
             printf("Package installation failed.\n");
@@ -28,7 +28,7 @@ int main(int argc, char *argv[]){
         }
     }
     else if(argv[1] != NULL && strcmp(argv[1], "rebuildrepos") == 0){
-        int result = system("sh src/rebuild_repos.sh");
+        int result = system("sh /etc/purr/src/rebuild_repos.sh");
         if (result != 0){
             printf("Repository rebuild failed.\n");
             return 1;

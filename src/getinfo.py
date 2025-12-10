@@ -2,7 +2,7 @@ import json
 
 URL = None
 try:
-    with open("purr.d/repositories.json", "r") as f:
+    with open("/etc/purr/purr.d/repositories.json", "r") as f:
         config = json.load(f)
         if config["main_stable"]["active"]:
             URL = config["main_stable"]["url"]

@@ -25,7 +25,7 @@ if accept.lower() == "y" or accept == "":
 else:
     quit(0)
 
-os.chdir("builds/")
+os.chdir("/etc/purr/builds/")
 if os.listdir() != []:
     for f in os.listdir():
         if os.path.isfile(f):
@@ -38,10 +38,10 @@ os.chdir("../")
 CONFIGURE = False
 for idx, content in enumerate(package_files):
 
-    if not os.path.exists("builds/"):
-        os.makedirs("builds/")
+    if not os.path.exists("/etc/purr/builds/"):
+        os.makedirs("/etc/purr/builds/")
 
-    filename = f"builds/{filenames[idx]}"
+    filename = f"/etc/purr/builds/{filenames[idx]}"
     
 
     if is_dir[idx]:
@@ -59,10 +59,10 @@ for idx, content in enumerate(package_files):
 
     print(filename)
     
-    if filename == "builds/metadata.json":
+    if filename == "/etc/purr/builds/metadata.json":
         print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Metadata file detected, reading installation info...")
         
-        with open("builds/metadata.json", "r") as f:
+        with open("/etc/purr/builds/metadata.json", "r") as f:
             try:
                 meta = json.loads(f.read())
                 installedin = meta.get("installedin")
@@ -77,7 +77,7 @@ for idx, content in enumerate(package_files):
         if 'name' not in locals():
             name = PACKAGE
 
-    if filename == "builds/configure":
+    if filename == "/etc/purr/builds/configure":
         os.chmod(filename, 0o755)
         print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Set execute permissions for 'configure' script. Are you sure you trust this script?")
         
@@ -87,10 +87,10 @@ for idx, content in enumerate(package_files):
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Installed file '{filename}' successfully.")
 
 if CONFIGURE:
-    if os.path.exists("builds/") == False:
-        os.makedirs("builds/")
+    if os.path.exists("/etc/purr/builds/") == False:
+        os.makedirs("/etc/purr/builds/")
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Running 'configure' script...")
-    os.chdir(f"builds/")
+    os.chdir(f"/etc/purr/builds/")
     if name.lower() == "python":
         configure_status = os.system("./configure --prefix=/usr/local")
     else:
@@ -102,10 +102,10 @@ if CONFIGURE:
     os.chdir("../")
 
 if make:
-    if os.path.exists("builds/") == False:
-        os.makedirs("builds/")
+    if os.path.exists("/etc/purr/builds/") == False:
+        os.makedirs("/etc/purr/builds/")
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
-    os.chdir(f"builds/")
+    os.chdir(f"/etc/purr/builds/")
     make_status = os.system("make")
 
     if make_status != 0:
@@ -115,8 +115,8 @@ if make:
 
 print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
 
-if os.path.exists("world.json"):
-    with open("world.json", "r") as f:
+if os.path.exists("/etc/purr/world.json"):
+    with open("/etc/purr/world.json", "r") as f:
         try:
             extworld = json.loads(f.read())
         except json.JSONDecodeError:
@@ -124,7 +124,7 @@ if os.path.exists("world.json"):
 else:
     extworld = {}
 
-with open("world.json", "w") as f:
+with open("/etc/purr/world.json", "w") as f:
     try:
         f.write(json.dumps({**extworld, PACKAGE: {"package": PACKAGE, "installedin" : installedin,"files": filenames, "name": name, "license": license, "author": author, "version": version}}, indent=4) + "\n")
     except NameError:
