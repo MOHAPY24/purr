@@ -9,7 +9,7 @@ A package manager for people who love building from source
 ## What is purr
 
 purr is a simple package manager that can build any type of application that uses a Makefile to build.
-Written in C and Python, it is modular, small and is VERY slow .(obvoius )
+Written in C and Python, it is modular, small and is VERY slow.
 
 ## Contributions
 
