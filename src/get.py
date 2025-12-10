@@ -51,13 +51,10 @@ for idx, content in enumerate(package_files):
     
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
-    
-    print(filename)
-    
+        
     with open(filename, "w") as f:
         f.write(content)
 
-    print(filename)
     
     if filename == "/etc/purr/builds/metadata.json":
         print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Metadata file detected, reading installation info...")
