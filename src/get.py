@@ -18,6 +18,7 @@ print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"F
 if make == True:
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Makefile detected, build will be attempted after installation.")
 
+
 accept = input("Accept install (Y/n)? ")
 
 if accept.lower() == "y" or accept == "":

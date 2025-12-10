@@ -8,8 +8,10 @@ try:
             URL = config["main_stable"]["url"]
         else:
             for key in config:
+                if key == "$schema":
+                    continue
                 if key != "main_stable":
-                    if key["active"]:
+                    if config[key]["active"]:
                         URL = config[key]["url"]
                         break
             if URL is None:
