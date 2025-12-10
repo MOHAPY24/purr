@@ -15,7 +15,7 @@ install:
 	cp -r * /etc/purr
 	chmod -R a+rw /etc/purr
 	rm /etc/purr/README.md
-	rm /etc/purr/purr
+	-rm /etc/purr/purr
 gitcommit: # remove if not contributing
 	rm -rf builds/*
 	echo "" >> world.json
