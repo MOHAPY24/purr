@@ -16,8 +16,11 @@ try:
                         break
             if URL is None:
                 print("No active configuration found in conf.json.")
+                exit(1)
 
 except FileNotFoundError:
     print("Repositories configuration file not found.")
+    exit(1)
 except json.JSONDecodeError:
     print("Error decoding the configuration file. maybe rebuid using 'purr rebuildrepos'")
+    exit(1)

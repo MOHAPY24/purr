@@ -5,13 +5,6 @@
         "author": "kma and momo",
         "version": "0.0.2",
         "license": "GPLv3",
-        "active": false
-    },
-    "main_testing":{
-        "url": "http://127.0.0.1",
-        "author": "momo",
-        "version": "0.0.1",
-        "license": "MIT",
         "active": true
     }
 
