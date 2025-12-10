@@ -1,0 +1,10 @@
+{
+    "$schema": "https://menory.site/pkgschema.json",
+    "main_stable": {
+        "url": "https://menory.site/",
+        "author": "kma and momo",
+        "version": "0.0.2",
+        "license": "GPLv3",
+        "active": true
+    }
+}

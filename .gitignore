@@ -1,0 +1,8 @@
+.vscode
+.venv
+*.out
+*.build
+__pycache__
+*.pyc
+venv/
+purr
