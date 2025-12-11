@@ -1,5 +1,4 @@
-import requests, os, sys, getinfo, getfilesdir, shutil
-
+import os, sys, getfilesdir, shutil
 from colorama import Fore, Style, init
 import json
 
