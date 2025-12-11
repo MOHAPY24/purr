@@ -15,6 +15,7 @@ int main(int argc, char *argv[]){
         printf("Purr usage:\n");
         printf("purr install <package_name> : Install a package\n");
         printf("purr rebuildrepos : Rebuild package repositories\n");
+        printf("purr rebuildworld: Rebuilds the world database\n");
         return 1;
     }
     if (argv[1] != NULL && strcmp(argv[1], "install") == 0){
@@ -39,7 +40,11 @@ int main(int argc, char *argv[]){
         printf("Are you sure you want to rebuild your world file, this will most likely end up in untraceable packages (y/N) ");
         scanf("%s", conf);
         if (strcmp(conf, "y") == 0 || strcmp(conf, "Y") == 0){
-            ;
+            int result = system("sh /usr/bin/purr/src/rebuildworld.sh");
+            if (result != 0){
+                printf("World rebuild failed.\n");
+                return 1;
+            }
         }
         else {
             exit(0);

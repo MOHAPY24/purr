@@ -1,24 +1,4 @@
-{
-    "badtool": {
-        "package": "badtool",
-        "installedin": "/usr/bin",
-        "files": [
-            "Makefile",
-            "badtool.c",
-            "metadata.json"
-        ],
-        "name": "badtool",
-        "license": "MIT",
-        "author": "BadTool Devs",
-        "version": "1.0.0"
-    }
-}
-
-
-
-
-
-
+{}
 
 
 

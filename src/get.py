@@ -104,6 +104,8 @@ if make:
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
     os.chdir(f"/usr/bin/purr/builds/")
     make_status = os.system("make")
+    if PACKAGE == "purr":
+        os.system("mv /usr/local/bin/purr.new /usr/local/bin/purr")
 
     if make_status != 0:
         print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile build failed with status code {make_status}.")
