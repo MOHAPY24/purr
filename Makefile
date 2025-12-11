@@ -11,11 +11,15 @@ install:
 	cp $(prog) /usr/local/bin/$(prog)
 	rm $(prog)
 	chmod +x /usr/local/bin/$(prog)
+	mkdir -p /usr/bin/purr
 	mkdir -p /etc/purr
-	cp -r * /etc/purr
+	rm -rf /etc/purr/*
+	cp -r src/* /usr/bin/purr/src
+	cp -r builds /usr/bin/purr/builds
+	cp -r purr.d/* /etc/purr/purr.d
+	cp world.json /etc/purr/world.json
 	chmod -R a+rw /etc/purr
-	rm /etc/purr/README.md
-	-rm /etc/purr/purr
+	chmod -R a+rw /usr/bin/purr
 gitcommit: # remove if not contributing
 	rm -rf builds/*
 	echo "" >> world.json

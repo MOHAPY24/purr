@@ -26,7 +26,8 @@ if accept.lower() == "y" or accept == "":
 else:
     quit(0)
 
-os.chdir("/etc/purr/builds/")
+curr_dir = os.curdir
+os.chdir("/usr/bin/purr/builds/")
 if os.listdir() != []:
     for f in os.listdir():
         if os.path.isfile(f):
@@ -34,17 +35,16 @@ if os.listdir() != []:
         else:
             shutil.rmtree(f)
 
-os.chdir("../")
+os.chdir(curr_dir)
 
 CONFIGURE = False
 for idx, content in enumerate(package_files):
 
-    if not os.path.exists("/etc/purr/builds/"):
-        os.makedirs("/etc/purr/builds/")
+    if not os.path.exists("/usr/bin/purr/builds/"):
+        os.makedirs("/usr/bin/purr/builds/")
 
-    filename = f"/etc/purr/builds/{filenames[idx]}"
+    filename = f"/usr/bin/purr/builds/{filenames[idx]}"
     
-
     if is_dir[idx]:
         os.makedirs(filename, exist_ok=True)
         print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Created directory '{filename}'.")
@@ -57,10 +57,10 @@ for idx, content in enumerate(package_files):
         f.write(content)
 
     
-    if filename == "/etc/purr/builds/metadata.json":
+    if filename == "/usr/bin/purr/builds/metadata.json":
         print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Metadata file detected, reading installation info...")
         
-        with open("/etc/purr/builds/metadata.json", "r") as f:
+        with open("/usr/bin/purr/builds/metadata.json", "r") as f:
             try:
                 meta = json.loads(f.read())
                 installedin = meta.get("installedin")
@@ -75,7 +75,7 @@ for idx, content in enumerate(package_files):
         if 'name' not in locals():
             name = PACKAGE
 
-    if filename == "/etc/purr/builds/configure":
+    if filename == "/usr/bin/purr/builds/configure":
         os.chmod(filename, 0o755)
         print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Set execute permissions for 'configure' script. Are you sure you trust this script?")
         
@@ -85,10 +85,10 @@ for idx, content in enumerate(package_files):
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Installed file '{filename}' successfully.")
 
 if CONFIGURE:
-    if os.path.exists("/etc/purr/builds/") == False:
-        os.makedirs("/etc/purr/builds/")
+    if os.path.exists("/usr/bin/purr/builds/") == False:
+        os.makedirs("/usr/bin/purr/builds/")
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Running 'configure' script...")
-    os.chdir(f"/etc/purr/builds/")
+    os.chdir(f"/usr/bin/purr/builds/")
     if name.lower() == "python":
         configure_status = os.system("./configure --prefix=/usr/local")
     else:
@@ -97,19 +97,19 @@ if CONFIGURE:
     if configure_status != 0:
         print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"'configure' script failed with status code {configure_status}.")
         exit(1)
-    os.chdir("../")
+    os.chdir(curr_dir)
 
 if make:
-    if os.path.exists("/etc/purr/builds/") == False:
-        os.makedirs("/etc/purr/builds/")
+    if os.path.exists("/usr/bin/purr/builds/") == False:
+        os.makedirs("/usr/bin/purr/builds/")
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
-    os.chdir(f"/etc/purr/builds/")
+    os.chdir(f"/usr/bin/purr/builds/")
     make_status = os.system("make")
 
     if make_status != 0:
         print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile build failed with status code {make_status}.")
         exit(1)
-    os.chdir("../")
+    os.chdir(curr_dir)
 
 print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
 
