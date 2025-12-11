@@ -1,3 +1,4 @@
+.SILENT:
 prog = purr
 cc = gcc
 msg = "Auto commit from Makefile script: timestamp $(shell date +"%Y-%m-%d %T")"
