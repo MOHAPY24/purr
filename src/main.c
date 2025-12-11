@@ -45,5 +45,13 @@ int main(int argc, char *argv[]){
             exit(0);
         }
     }
+    else if(argv[1] != NULL && strcmp(argv[1], "upgrade") == 0){
+        char command[256];
+        int result = system("python3 /usr/bin/purr/src/get.py purr");
+        if (result != 0){
+            printf("Upgrade failed.\n");
+            return 1;
+        }
+    }
     return 0;
 }
