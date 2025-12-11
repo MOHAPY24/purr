@@ -10,6 +10,9 @@ $(prog): src/main.c
 	chmod +x /usr/local/bin/$(prog)
 	mkdir -p /usr/bin/purr
 	mkdir -p /etc/purr
+	mkdir -p /usr/bin/purr/src
+	mkdir -p /usr/bin/purr/builds
+	mkdir -p /usr/bin/purr/purr.d
 	rm -rf /etc/purr/*
 	cp -r src/* /usr/bin/purr/src
 	cp -r builds /usr/bin/purr/builds
