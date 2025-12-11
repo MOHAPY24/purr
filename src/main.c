@@ -50,5 +50,8 @@ int main(int argc, char *argv[]){
             exit(0);
         }
     }
+    else{
+        printf("Invalid command\n");
+    }
     return 0;
 }
