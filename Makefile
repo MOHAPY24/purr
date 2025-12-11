@@ -29,7 +29,7 @@ clean:
 
 gitcommit: # remove if not contributing
 	rm -rf builds/*
-	echo "" >> world.json
+	echo "{}" > world.json
 	git add .
 	git commit -m $(msg)
 	git push origin master
