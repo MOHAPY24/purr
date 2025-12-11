@@ -53,7 +53,7 @@ if make:
         os.makedirs("/usr/bin/purr/builds/")
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
     os.chdir(f"/usr/bin/purr/builds/")
-    make_status = os.system("make")
+    make_status = os.system("make -s")
     
 
 
