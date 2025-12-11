@@ -12,8 +12,8 @@ def get_file_list(directorys=""):
         if directory.endswith('/'):
             directory = directory[:-1]
     except:
-        directory = ""
-        print(Fore.YELLOW + Style.BRIGHT + f"WARN! " + Style.RESET_ALL + Fore.RESET +  "Formatting error, using root directory.")
+        print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET +  "Formatting error, quiting..")
+        exit(1)
     
     file_contents = []
     file_names = []

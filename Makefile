@@ -5,18 +5,19 @@ msg = "Auto commit from Makefile script: timestamp $(shell date +"%Y-%m-%d %T")"
 
 $(prog): src/main.c
 	$(cc) src/checks.c src/main.c -o $(prog)
+	$(cc) src/upgrade.c src/checks.c -o purr-upgrade
 	cp $(prog) /usr/local/bin/$(prog)
+	cp purr-upgrade /usr/local/bin/purr-upgrade
 	rm $(prog)
-	chmod +x /usr/local/bin/$(prog)
+	rm purr-upgrade
 	mkdir -p /usr/bin/purr
 	mkdir -p /etc/purr
 	mkdir -p /usr/bin/purr/src
 	mkdir -p /usr/bin/purr/builds
 	mkdir -p /usr/bin/purr/purr.d
 	rm -rf /etc/purr/*
-	cp -r src/* /usr/bin/purr/src
-	cp -r builds /usr/bin/purr/builds
-	cp -r purr.d/* /etc/purr/purr.d
+	cp -r src/ /usr/bin/purr
+	cp -r purr.d/ /etc/purr/
 	cp world.json /etc/purr/world.json
 	chmod -R a+rw /etc/purr
 	chmod -R a+rw /usr/bin/purr
