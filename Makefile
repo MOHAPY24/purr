@@ -33,3 +33,8 @@ gitcommit: # remove if not contributing
 	git add .
 	git commit -m $(msg)
 	git push origin master
+
+help:
+	normal (make)
+	clean
+	gitcommit: not needed for normal people
