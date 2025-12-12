@@ -21,11 +21,21 @@ int main(int argc, char *argv[]){
     if (argv[1] != NULL && strcmp(argv[1], "install") == 0){
         printf("Installing package: %s\n", argv[2]);
         char command[256];
-        snprintf(command, sizeof(command), "python3 /usr/bin/purr/src/get.py %s", argv[2]);
-        int result = system(command);
-        if (result != 0){
-            printf("Package installation failed.\n");
-            return 1;
+        if(argv[3] != NULL && strcmp(argv[3], "--no-conf") == 0){
+            snprintf(command, sizeof(command), "python3 /usr/bin/purr/src/get.py %s y", argv[2]);
+            int result = system(command);
+            if (result != 0){
+                printf("Package installation failed.\n");
+                return 1;
+            }
+        }
+        else{
+            snprintf(command, sizeof(command), "python3 /usr/bin/purr/src/get.py %s", argv[2]);
+            int result = system(command);
+            if (result != 0){
+                printf("Package installation failed.\n");
+                return 1;
+            }
         }
     }
     else if(argv[1] != NULL && strcmp(argv[1], "rebuildrepos") == 0){

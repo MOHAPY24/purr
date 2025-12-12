@@ -2,6 +2,11 @@ import os, sys, getfilesdir, shutil
 from colorama import Fore, Style, init
 import json
 
+try:
+    conf = sys.argv[2]
+except:
+    conf = 'n'
+
 init(autoreset=True)
 
 PACKAGE = "purr"
@@ -9,14 +14,13 @@ PACKAGE = "purr"
 package_files, make, filenames, is_dir = getfilesdir.get_file_list(PACKAGE)
 print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Files to be installed: {len(package_files)}")
 
+if conf != 'y':
+    accept = input("Accept upgrade (Y/n)? ")
 
-
-accept = input("Accept upgrade (Y/n)? ")
-
-if accept.lower() == "y" or accept == "":
-    pass
-else:
-    quit(0)
+    if accept.lower() == "y" or accept == "":
+        pass
+    else:
+        quit(0)
 
 curr_dir = os.curdir
 os.chdir("/usr/bin/purr/builds/")

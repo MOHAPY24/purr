@@ -11,19 +11,25 @@ except:
     exit(1)
 
 
+try:
+    conf = sys.argv[2]
+except:
+    conf = 'n'
+
+
+
 package_files, make, filenames, is_dir = getfilesdir.get_file_list(PACKAGE)
 print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Files to be installed: {len(package_files)}")
 
 if make == True:
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Makefile detected, build will be attempted after installation.")
 
-
-accept = input("Accept install (Y/n)? ")
-
-if accept.lower() == "y" or accept == "":
-    pass
-else:
-    quit(0)
+if conf != 'y':
+    accept = input("Accept install (Y/n)? ")
+    if accept.lower() == "y" or accept == "":
+        pass
+    else:
+        quit(0)
 
 curr_dir = os.curdir
 os.chdir("/usr/bin/purr/builds/")
