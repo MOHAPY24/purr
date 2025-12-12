@@ -22,5 +22,5 @@ except FileNotFoundError:
     print("Repositories configuration file not found.")
     exit(1)
 except json.JSONDecodeError:
-    print("Error decoding the configuration file. maybe rebuid using 'purr rebuildrepos'")
+    print("Error decoding the configuration file. maybe rebuild using 'purr rebuildrepos'")
     exit(1)
