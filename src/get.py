@@ -116,7 +116,6 @@ if make:
     make_status = os.system("make install")
     if make_status != 0:
         print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile install build failed with status code {make_status}. may not have a install command.")
-        exit(1)
     os.chdir(curr_dir)
 
 print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
