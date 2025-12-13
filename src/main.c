@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
         printf("purr rebuildworld: Rebuilds the world database\n");
         return 1;
     }
-    if (argv[1] != NULL && strcmp(argv[1], "install") == 0){
+    if (argv[1] != NULL && strcmp(argv[1], "install") == 0 && argv[2] != NULL){
         printf("Installing package: %s\n", argv[2]);
         char command[256];
         if(argv[3] != NULL && strcmp(argv[3], "--no-conf") == 0){
@@ -58,6 +58,15 @@ int main(int argc, char *argv[]){
         }
         else {
             exit(0);
+        }
+    }
+    else if(argv[1] != NULL && strcmp(argv[1], "remove") == 0 && argv[2] != NULL){
+        char command[256];
+        snprintf(command, sizeof(command), "python3 /usr/bin/purr/src/remove.py %s", argv[2]);
+        int result = system(command);
+        if (result != 0){
+            printf("Package removal failed.\n");
+            return 1;
         }
     }
     else{
