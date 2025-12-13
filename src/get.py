@@ -6,7 +6,7 @@ import subprocess
 init(autoreset=True)
 
 result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
-if result.stdout != "":
+if result.stdout not in " \n\t":
     print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"purr can be upgraded, run purr-upgrade")
 
 try:
