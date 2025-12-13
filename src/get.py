@@ -15,16 +15,10 @@ except:
     print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET +  f"No file specified to get.")
     exit(1)
 
-
-
-
 try:
     conf = sys.argv[2]
 except:
     conf = 'n'
-
-
-
 package_files, make, filenames, is_dir = getfilesdir.get_file_list(PACKAGE)
 print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Files to be installed: {len(package_files)}")
 
