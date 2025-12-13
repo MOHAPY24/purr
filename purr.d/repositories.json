@@ -5,6 +5,6 @@
         "author": "kma and momo",
         "version": "0.0.2",
         "license": "GPLv3",
-        "active": false
+        "active": true
     }
 }

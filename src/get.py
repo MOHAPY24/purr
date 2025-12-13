@@ -1,8 +1,13 @@
 import os, sys, getfilesdir, shutil
 from colorama import Fore, Style, init
 import json
+import subprocess
 
 init(autoreset=True)
+
+result = subprocess.run(["git", "fetch"], capture_output=True, text=True)
+if result.stdout != "":
+    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"purr can be upgraded, run purr-upgrade")
 
 try:
     PACKAGE = sys.argv[1]

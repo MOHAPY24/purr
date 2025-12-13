@@ -15,11 +15,11 @@ try:
                         URL = config[key]["url"]
                         break
             if URL is None:
-                print("No active configuration found in conf.json.")
+                print("No active configuration found in repositories.json.")
                 exit(1)
 
 except FileNotFoundError:
-    print("Repositories configuration file not found.")
+    print("Repositories configuration file not found. maybe rebuild using 'purr rebuildrepos'")
     exit(1)
 except json.JSONDecodeError:
     print("Error decoding the configuration file. maybe rebuild using 'purr rebuildrepos'")
