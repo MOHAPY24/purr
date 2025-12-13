@@ -16,6 +16,8 @@ int main(int argc, char *argv[]){
         printf("purr install <package_name> : Install a package\n");
         printf("purr rebuildrepos : Rebuild package repositories\n");
         printf("purr rebuildworld: Rebuilds the world database\n");
+        printf("purr remove <package_name>: Removes a package\n");
+
         return 1;
     }
     if (argv[1] != NULL && strcmp(argv[1], "install") == 0 && argv[2] != NULL){
