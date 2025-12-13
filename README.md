@@ -45,7 +45,7 @@ Contributions are appreciated, fork the repo and do a pull request.
 
 ## Credits
 
-Credits to kma and me :).
+Credits to kma, spakezz and me :).
 
 ## LICENSE
 
