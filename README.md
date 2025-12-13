@@ -30,7 +30,7 @@ sudo make
 then test with a test tool
 
 ```shell
-sudo purr install badtool --no-conf # no conf so you dont have to confirm the install
+sudo purr install mfget --no-conf # no conf so you dont have to confirm the install
 ```
 
 upgrade purr
