@@ -1,6 +1,7 @@
 import os, sys, getfilesdir, shutil
 from colorama import Fore, Style, init
 import json
+from functools import lru_cache
 
 try:
     conf = sys.argv[2]
@@ -33,38 +34,44 @@ if os.listdir() != []:
 
 os.chdir(curr_dir)
 
-for idx, content in enumerate(package_files):
+@lru_cache(maxsize=128)
+def build():
+    build.cache_clear()
+    for idx, content in enumerate(package_files):
 
-    if not os.path.exists("/usr/bin/purr/builds/"):
-        os.makedirs("/usr/bin/purr/builds/")
+        if not os.path.exists("/usr/bin/purr/builds/"):
+            os.makedirs("/usr/bin/purr/builds/")
 
-    filename = f"/usr/bin/purr/builds/{filenames[idx]}"
-    
-    if is_dir[idx]:
-        os.makedirs(filename, exist_ok=True)
-        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Created directory '{filename}'.")
-        continue
-    
-
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+        filename = f"/usr/bin/purr/builds/{filenames[idx]}"
         
-    with open(filename, "w") as f:
-        f.write(content)
-    name = PACKAGE
+        if is_dir[idx]:
+            os.makedirs(filename, exist_ok=True)
+            print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Created directory '{filename}'.")
+            continue
+        
 
-if make:
-    if os.path.exists("/usr/bin/purr/builds/") == False:
-        os.makedirs("/usr/bin/purr/builds/")
-    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
-    os.chdir(f"/usr/bin/purr/builds/")
-    make_status = os.system("make -s")
-    
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+            
+        with open(filename, "w") as f:
+            f.write(content)
+        name = PACKAGE
+
+    if make:
+        if os.path.exists("/usr/bin/purr/builds/") == False:
+            os.makedirs("/usr/bin/purr/builds/")
+        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
+        os.chdir(f"/usr/bin/purr/builds/")
+        make_status = os.system("make -s")
+        
 
 
 
-    if make_status != 0:
-        print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile build failed with status code {make_status}.")
-        exit(1)
-    os.chdir(curr_dir)
+        if make_status != 0:
+            print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile build failed with status code {make_status}.")
+            exit(1)
+        os.chdir(curr_dir)
 
-print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
+    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
+
+if __name__ == "__main__":
+    build()

@@ -3,10 +3,12 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import getinfo
 from colorama import Fore, Style, init
+from functools import lru_cache
 init(autoreset=True)
 
-
+@lru_cache(maxsize=128)
 def get_file_list(directorys=""):
+    get_file_list.cache_clear()
     try:
         directory = directorys.strip()
         if directory.endswith('/'):

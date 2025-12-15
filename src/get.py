@@ -2,6 +2,7 @@ import os, sys, getfilesdir, shutil
 from colorama import Fore, Style, init
 import json
 import subprocess
+from functools import lru_cache
 
 init(autoreset=True)
 
@@ -43,98 +44,105 @@ if os.listdir() != []:
 
 os.chdir(curr_dir)
 
-CONFIGURE = False
-for idx, content in enumerate(package_files):
 
-    if not os.path.exists("/usr/bin/purr/builds/"):
-        os.makedirs("/usr/bin/purr/builds/")
+@lru_cache(maxsize=128)
+def build():
+    build.cache_clear()
+    CONFIGURE = False
+    for idx, content in enumerate(package_files):
 
-    filename = f"/usr/bin/purr/builds/{filenames[idx]}"
-    
-    if is_dir[idx]:
-        os.makedirs(filename, exist_ok=True)
-        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Created directory '{filename}'.")
-        continue
-    
+        if not os.path.exists("/usr/bin/purr/builds/"):
+            os.makedirs("/usr/bin/purr/builds/")
 
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+        filename = f"/usr/bin/purr/builds/{filenames[idx]}"
         
-    with open(filename, "w") as f:
-        f.write(content)
-
-    
-    if filename == "/usr/bin/purr/builds/metadata.json":
-        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Metadata file detected, reading installation info...")
+        if is_dir[idx]:
+            os.makedirs(filename, exist_ok=True)
+            print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Created directory '{filename}'.")
+            continue
         
-        with open("/usr/bin/purr/builds/metadata.json", "r") as f:
-            try:
-                meta = json.loads(f.read())
-                installedin = meta.get("installedin")
-                name = meta.get("name", PACKAGE)
-                version = meta.get("version")
-                author = meta.get("author")
-                license = meta.get("license")
 
-            except:
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+            
+        with open(filename, "w") as f:
+            f.write(content)
+
+        
+        if filename == "/usr/bin/purr/builds/metadata.json":
+            print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Metadata file detected, reading installation info...")
+            
+            with open("/usr/bin/purr/builds/metadata.json", "r") as f:
+                try:
+                    meta = json.loads(f.read())
+                    installedin = meta.get("installedin")
+                    name = meta.get("name", PACKAGE)
+                    version = meta.get("version")
+                    author = meta.get("author")
+                    license = meta.get("license")
+
+                except:
+                    name = PACKAGE
+        else:
+            if 'name' not in locals():
                 name = PACKAGE
-    else:
-        if 'name' not in locals():
-            name = PACKAGE
 
-    if filename == "/usr/bin/purr/builds/configure":
-        os.chmod(filename, 0o755)
-        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Set execute permissions for 'configure' script. Are you sure you trust this script?")
-        
+        if filename == "/usr/bin/purr/builds/configure":
+            os.chmod(filename, 0o755)
+            print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Set execute permissions for 'configure' script. Are you sure you trust this script?")
+            
+            if name.lower() == "python":
+                print(Fore.YELLOW + Style.BRIGHT + f"WARN! " + Style.RESET_ALL + Fore.RESET + f"Python 'configure' scripts may require additional dependencies to run successfully.")
+            CONFIGURE = True  
+        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Installed file '{filename}' successfully.")
+
+    if CONFIGURE:
+        if os.path.exists("/usr/bin/purr/builds/") == False:
+            os.makedirs("/usr/bin/purr/builds/")
+        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Running 'configure' script...")
+        os.chdir(f"/usr/bin/purr/builds/")
         if name.lower() == "python":
-            print(Fore.YELLOW + Style.BRIGHT + f"WARN! " + Style.RESET_ALL + Fore.RESET + f"Python 'configure' scripts may require additional dependencies to run successfully.")
-        CONFIGURE = True  
-    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Installed file '{filename}' successfully.")
+            configure_status = os.system("./configure --prefix=/usr/local")
+        else:
+            configure_status = os.system("./configure")
 
-if CONFIGURE:
-    if os.path.exists("/usr/bin/purr/builds/") == False:
-        os.makedirs("/usr/bin/purr/builds/")
-    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Running 'configure' script...")
-    os.chdir(f"/usr/bin/purr/builds/")
-    if name.lower() == "python":
-        configure_status = os.system("./configure --prefix=/usr/local")
+        if configure_status != 0:
+            print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"'configure' script failed with status code {configure_status}.")
+            exit(1)
+        os.chdir(curr_dir)
+
+    if make:
+        if os.path.exists("/usr/bin/purr/builds/") == False:
+            os.makedirs("/usr/bin/purr/builds/")
+        print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
+        os.chdir(f"/usr/bin/purr/builds/")
+        make_status = os.system("make")
+        if make_status != 0:
+            print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile inital build failed with status code {make_status}.")
+            exit(1)
+        make_status = os.system("make install")
+        if make_status != 0:
+            print(Fore.RED + Style.BRIGHT + f"minor ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile install build failed with status code {make_status}. may not have a install command.")
+        os.chdir(curr_dir)
+
+    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
+
+    if os.path.exists("/etc/purr/world.json"):
+        with open("/etc/purr/world.json", "r") as f:
+            try:
+                extworld = json.loads(f.read())
+            except json.JSONDecodeError:
+                extworld = {}
     else:
-        configure_status = os.system("./configure")
+        extworld = {}
 
-    if configure_status != 0:
-        print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"'configure' script failed with status code {configure_status}.")
-        exit(1)
-    os.chdir(curr_dir)
-
-if make:
-    if os.path.exists("/usr/bin/purr/builds/") == False:
-        os.makedirs("/usr/bin/purr/builds/")
-    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Starting build process using Makefile...")
-    os.chdir(f"/usr/bin/purr/builds/")
-    make_status = os.system("make")
-    if make_status != 0:
-        print(Fore.RED + Style.BRIGHT + f"fatal ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile inital build failed with status code {make_status}.")
-        exit(1)
-    make_status = os.system("make install")
-    if make_status != 0:
-        print(Fore.RED + Style.BRIGHT + f"minor ERR! " + Style.RESET_ALL + Fore.RESET + f"Makefile install build failed with status code {make_status}. may not have a install command.")
-    os.chdir(curr_dir)
-
-print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"All files installed successfully.")
-
-if os.path.exists("/etc/purr/world.json"):
-    with open("/etc/purr/world.json", "r") as f:
+    with open("/etc/purr/world.json", "w") as f:
         try:
-            extworld = json.loads(f.read())
-        except json.JSONDecodeError:
-            extworld = {}
-else:
-    extworld = {}
+            f.write(json.dumps({**extworld, PACKAGE: {"package": PACKAGE, "installedin" : installedin,"files": filenames, "name": name, "license": license, "author": author, "version": version}}, indent=4) + "\n")
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + f"WARNING! " + Style.RESET_ALL + Fore.RESET + f"Installation metadata not found, cannot update fully world.json.")
+            f.write(json.dumps({**extworld, PACKAGE: {"package": PACKAGE, "files": filenames}}, indent=4) + "\n")
 
-with open("/etc/purr/world.json", "w") as f:
-    try:
-        f.write(json.dumps({**extworld, PACKAGE: {"package": PACKAGE, "installedin" : installedin,"files": filenames, "name": name, "license": license, "author": author, "version": version}}, indent=4) + "\n")
-    except NameError:
-        print(Fore.YELLOW + Style.BRIGHT + f"WARNING! " + Style.RESET_ALL + Fore.RESET + f"Installation metadata not found, cannot update fully world.json.")
-        f.write(json.dumps({**extworld, PACKAGE: {"package": PACKAGE, "files": filenames}}, indent=4) + "\n")
+    print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Package '{PACKAGE}' installed successfully.")
 
-print(Fore.GREEN + Style.BRIGHT + f"info: " + Style.RESET_ALL + Fore.RESET + f"Package '{PACKAGE}' installed successfully.")
+if __name__ == "__main__":
+    build()
