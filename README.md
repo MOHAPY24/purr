@@ -17,7 +17,7 @@ Written in C and Python, it is modular, small and is VERY slow.
 clone the repo
 
 ```shell
-git clone https://github.com/MOHAPY24/purr
+git clone https://github.com/sirruserror/purr
 cd purr
 ```
 
